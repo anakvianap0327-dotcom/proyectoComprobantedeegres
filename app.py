@@ -202,7 +202,7 @@ def generar_pdf(numero, comprobante):
         c.drawString(70, y_concepto, linea)
         y_concepto -= 15
 
-    valor = int(float(comprobante['valor']))
+    valor = int(float(comprobante['valor'] or 0))
 
     c.setFont("Helvetica-Bold", 11)
     c.drawString(70, y_concepto-10, f"Valor: $ {valor:,}")
@@ -304,7 +304,7 @@ def generar_pdf(numero, comprobante):
             #subject=asunto,
             #contents=mensaje,
             #attachments=ruta_pdf
-        )
+        
 
         #print("Correo enviado correctamente")
 
