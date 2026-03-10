@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Comprobante de Egreso</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body{
+background:#f4f6f9;
+}
+
+.documento{
+background:white;
+max-width:850px;
+margin:auto;
+margin-top:40px;
+padding:45px;
+border:1px solid #ddd;
+box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+}
+
+.titulo{
+text-align:center;
+font-size:28px;
+font-weight:bold;
+margin-bottom:20px;
+letter-spacing:1px;
+}
+
+.numero{
+text-align:right;
+font-weight:bold;
+font-size:16px;
+margin-bottom:15px;
+}
+
+/* SECCIONES */
+
+.seccion{
+padding:20px;
+border-radius:10px;
+margin-top:25px;
+}
+
+.pagador{
+background:#eef5ff;
+border-left:6px solid #0d6efd;
+}
+
+.beneficiario{
+background:#eefaf1;
+border-left:6px solid #198754;
+}
+
+.pago{
+background:#fff9e6;
+border-left:6px solid #ffc107;
+}
+
+.seccion h5{
+font-weight:bold;
+margin-bottom:15px;
+}
+
+.linea{
+border-top:1px solid #000;
+width:260px;
+margin:auto;
+margin-top:10px;
+}
+
+.firma{
+text-align:center;
+margin-top:35px;
+}
+
+.valor{
+font-size:18px;
+font-weight:bold;
+}
+
+/* TEXTO LEGAL */
+
+.texto-legal{
+margin-top:25px;
+font-size:14px;
+text-align:justify;
+color:#333;
+line-height:1.6;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="documento">
+
+<div class="titulo">
+COMPROBANTE DE EGRESO
+</div>
+
+<div class="numero">
+No. {{ comprobante[0] }}
+</div>
+
+<hr>
+
+<!-- PAGADOR -->
+
+<div class="seccion pagador">
+
+<h5>Datos del pagador</h5>
+
+<p><strong>Nombre:</strong> Erick Mercado Otero</p>
+<p><strong>Documento:</strong> 1082867642</p>
+
+</div>
+
+<!-- BENEFICIARIO -->
+
+<div class="seccion beneficiario">
+
+<h5>Datos del beneficiario</h5>
+
+<p><strong>Documento:</strong> {{ comprobante[1] }}</p>
+
+<p><strong>Nombre:</strong> {{ comprobante[2] }}</p>
+
+<p><strong>Dirección:</strong> {{ comprobante[3] }}</p>
+
+<p><strong>Celular:</strong> {{ comprobante[4] }}</p>
+
+</div>
+
+<!-- INFORMACIÓN DEL PAGO -->
+
+<div class="seccion pago">
+
+<h5>Información del pago</h5>
+
+<p><strong>Concepto:</strong></p>
+
+<p>{{ comprobante[5] }}</p>
+
+<p class="valor">
+<strong>Valor:</strong> $ {{ "{:,.0f}".format(comprobante[6]) }}
+</p>
+
+<p><strong>Fecha:</strong> {{ comprobante[7] }}</p>
+
+<p><strong>Método de pago:</strong> Transferencia</p>
+
+</div>
+
+<!-- TEXTO LEGAL -->
+
+<div class="texto-legal">
+
+<strong>Declaración de recibido:</strong><br><br>
+
+Mediante la presente firma declaro que he recibido a mi entera satisfacción la suma de dinero indicada
+en este comprobante, correspondiente al concepto anteriormente descrito. En constancia de lo anterior,
+manifiesto que el pago ha sido realizado en su totalidad y que no tengo reclamación posterior alguna
+por este concepto, liberando al pagador de cualquier obligación adicional relacionada con el presente pago.
+
+Este comprobante se expide como constancia del pago realizado y sirve como soporte del egreso efectuado.
+
+</div>
+
+<!-- FIRMA -->
+
+<div class="firma">
+
+<img src="{{ comprobante[8] }}" width="250">
+
+<div class="linea"></div>
+
+<strong>{{ comprobante[2] }}</strong><br>
+CC {{ comprobante[1] }}
+
+</div>
+
+<br><br>
+
+<div class="text-center">
+
+<button class="btn btn-primary" onclick="window.print()">
+Imprimir / Guardar PDF
+</button>
+
+<a href="/consultar_comprobantes" class="btn btn-secondary">
+Volver
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

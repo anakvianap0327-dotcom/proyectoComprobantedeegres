@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Registrar Persona</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+/* fondo del sistema */
+body{
+background:#f4f6f9;
+}
+
+/* tarjeta del formulario */
+.card-form{
+border-radius:12px;
+padding:30px;
+}
+
+/* inputs más cómodos para celular */
+.form-control{
+font-size:18px;
+padding:12px;
+}
+
+/* botones grandes */
+.btn{
+font-size:18px;
+padding:12px;
+}
+
+/* mejorar visualización móvil */
+@media (max-width:768px){
+
+.container-fluid{
+padding:10px;
+}
+
+.card-form{
+padding:25px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- BARRA DEL SISTEMA -->
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+<div class="container-fluid">
+
+<a class="navbar-brand" href="/">Sistema Comprobantes</a>
+
+<div class="navbar-nav">
+
+<a class="nav-link" href="/">Inicio</a>
+<a class="nav-link" href="/comprobante">Crear Comprobante</a>
+<a class="nav-link" href="/personas">Registrar Persona</a>
+<a class="nav-link" href="/consultar_personas">Consultar Personas</a>
+
+</div>
+
+</div>
+
+</nav>
+
+
+<!-- CONTENEDOR -->
+
+<div class="container-fluid mt-4">
+
+<div class="row justify-content-center">
+
+<div class="col-12 col-md-6 col-lg-5">
+
+<div class="card shadow card-form">
+
+<h3 class="text-center mb-4">
+Registrar Trabajador / Proveedor
+</h3>
+
+<form method="POST" action="/guardar_persona">
+
+<div class="mb-3">
+
+<label class="form-label">Tipo de persona</label>
+
+<select name="tipo" class="form-control form-control-lg" required>
+
+<option value="">Seleccione</option>
+<option value="trabajador">Trabajador</option>
+<option value="proveedor">Proveedor</option>
+
+</select>
+
+</div>
+
+
+<div class="mb-3">
+
+<label class="form-label">Documento</label>
+
+<input 
+type="text"
+name="documento"
+class="form-control form-control-lg"
+placeholder="Ingrese número de documento"
+required>
+
+</div>
+
+
+<div class="mb-3">
+
+<label class="form-label">Nombre</label>
+
+<input 
+type="text"
+name="nombre"
+class="form-control form-control-lg"
+placeholder="Nombre completo"
+required>
+
+</div>
+
+
+<div class="mb-3">
+
+<label class="form-label">Dirección</label>
+
+<input 
+type="text"
+name="direccion"
+class="form-control form-control-lg"
+placeholder="Dirección de residencia">
+
+</div>
+
+
+<div class="mb-3">
+
+<label class="form-label">Celular</label>
+
+<input 
+type="text"
+name="celular"
+class="form-control form-control-lg"
+placeholder="Número de celular">
+
+</div>
+
+
+<div class="d-grid gap-3">
+
+<button type="submit" class="btn btn-success btn-lg w-100">
+Guardar Persona
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

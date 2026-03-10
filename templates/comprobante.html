@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Crear Comprobante</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+
+<script>
+
+function calcularTotal(){
+
+let subtotal = parseFloat(document.getElementById("subtotal").value) || 0;
+let iva = parseFloat(document.getElementById("iva").value) || 0;
+let retencion = parseFloat(document.getElementById("retencion").value) || 0;
+
+let total = subtotal + iva - retencion;
+
+document.getElementById("total").value = total.toFixed(2);
+
+}
+
+function actualizarFirma(){
+
+let nombre = document.getElementById("nombre").value;
+let cc = document.getElementById("cc").value;
+
+document.getElementById("firma_nombre").innerText = nombre;
+document.getElementById("firma_cc").innerText = "CC: " + cc;
+
+}
+
+function buscarPersona(){
+
+let documento = document.getElementById("cc").value.trim();
+
+if(documento.length < 3){
+return;
+}
+
+fetch("/buscar_persona?documento=" + encodeURIComponent(documento))
+.then(response => response.json())
+.then(data => {
+
+if(data && data.nombre){
+
+document.getElementById("nombre").value = data.nombre || "";
+document.getElementById("direccion").value = data.direccion || "";
+document.getElementById("celular").value = data.celular || "";
+
+actualizarFirma();
+
+}else{
+
+document.getElementById("nombre").value = "";
+document.getElementById("direccion").value = "";
+document.getElementById("celular").value = "";
+
+}
+
+})
+.catch(error => {
+console.error("Error buscando persona:", error);
+});
+
+}
+
+function ponerFechaHoy(){
+
+let hoy = new Date();
+
+let yyyy = hoy.getFullYear();
+let mm = String(hoy.getMonth()+1).padStart(2,'0');
+let dd = String(hoy.getDate()).padStart(2,'0');
+
+document.getElementById("fecha").value = yyyy + "-" + mm + "-" + dd;
+
+}
+
+</script>
+
+<style>
+
+body{
+background:#f4f6f9;
+}
+
+.form-control{
+font-size:18px;
+padding:12px;
+}
+
+.btn{
+font-size:18px;
+padding:12px;
+}
+
+#firma{
+height:250px;
+}
+
+.seccion{
+padding:20px;
+border-radius:10px;
+margin-bottom:25px;
+}
+
+.pagador{
+background:#eef5ff;
+border-left:6px solid #0d6efd;
+}
+
+.beneficiario{
+background:#eefaf1;
+border-left:6px solid #198754;
+}
+
+.pago{
+background:#fff9e6;
+border-left:6px solid #ffc107;
+}
+
+.firma{
+background:#f1f1f1;
+border-left:6px solid #6c757d;
+}
+
+.auto-field{
+background:#e9ecef !important;
+}
+
+</style>
+
+</head>
+
+<body class="bg-light" onload="ponerFechaHoy()">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+<div class="container-fluid">
+
+<a class="navbar-brand" href="/">Sistema Comprobantes</a>
+
+<div class="navbar-nav">
+
+<a class="nav-link" href="/">Inicio</a>
+<a class="nav-link" href="/comprobante">Crear Comprobante</a>
+<a class="nav-link" href="/personas">Registrar Persona</a>
+<a class="nav-link" href="/consultar_personas">Consultar Personas</a>
+<a class="nav-link" href="/consultar_comprobantes">Consultar Comprobantes</a>
+
+</div>
+
+</div>
+
+</nav>
+
+<div class="container-fluid mt-4">
+
+<div class="card shadow">
+
+<div class="card-header bg-primary text-white text-center">
+<h4 class="fw-bold">COMPROBANTE DE EGRESO</h4>
+</div>
+
+<div class="text-end p-3">
+<h5>No. Comprobante: {{ numero }}</h5>
+</div>
+
+<div class="card-body">
+
+<form method="POST" action="/guardar_comprobante">
+
+<input type="hidden" name="numero" value="{{ numero }}">
+
+<div class="seccion pagador">
+
+<h5 class="mb-3">Datos del pagador</h5>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+<label class="form-label">Pagador</label>
+<input type="text" class="form-control auto-field" value="Erick Mercado Otero" readonly>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label">Cédula</label>
+<input type="text" class="form-control auto-field" value="1082867642" readonly>
+</div>
+
+</div>
+
+</div>
+
+<div class="seccion beneficiario">
+
+<h5 class="mb-3">Datos del beneficiario</h5>
+
+<div class="row">
+
+<div class="col-md-4 mb-3">
+<label class="form-label">CC o NIT</label>
+<input type="text" id="cc" name="documento" class="form-control" onkeyup="buscarPersona(); actualizarFirma()" required>
+</div>
+
+<div class="col-md-8 mb-3">
+<label class="form-label">Nombre</label>
+<input type="text" id="nombre" name="nombre" class="form-control auto-field" readonly required>
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+<label class="form-label">Dirección</label>
+<input type="text" id="direccion" name="direccion" class="form-control auto-field" readonly>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label">Celular</label>
+<input type="text" id="celular" name="celular" class="form-control auto-field" readonly>
+</div>
+
+</div>
+
+</div>
+
+<div class="seccion pago">
+
+<h5 class="mb-3">Información del pago</h5>
+
+<div class="mb-3">
+<label class="form-label">Concepto</label>
+<textarea rows="4" name="concepto" class="form-control" required></textarea>
+</div>
+
+<div class="row">
+
+<div class="col-md-4 mb-3">
+<label class="form-label">Subtotal</label>
+<input type="number" id="subtotal" class="form-control" oninput="calcularTotal()">
+</div>
+
+<div class="col-md-4 mb-3">
+<label class="form-label">IVA</label>
+<input type="number" id="iva" class="form-control" oninput="calcularTotal()">
+</div>
+
+<div class="col-md-4 mb-3">
+<label class="form-label">Retención</label>
+<input type="number" id="retencion" class="form-control" oninput="calcularTotal()">
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+<label class="form-label">Total</label>
+<input type="number" id="total" name="valor" class="form-control auto-field" readonly required>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label">Fecha</label>
+<input type="date" id="fecha" name="fecha" class="form-control auto-field">
+</div>
+
+</div>
+
+</div>
+
+<div class="seccion firma">
+
+<h5 class="mt-2">Firma del beneficiario</h5>
+
+<canvas id="firma" style="border:1px solid #000;width:100%;"></canvas>
+
+<div class="text-center mt-3">
+
+<hr style="width:300px;margin:auto">
+
+<strong id="firma_nombre"></strong><br>
+<span id="firma_cc"></span>
+
+</div>
+
+<br>
+
+<button type="button" class="btn btn-secondary w-100 mb-3" onclick="limpiarFirma()">Limpiar firma</button>
+
+<input type="hidden" id="firma_guardada" name="firma">
+
+<button type="submit" class="btn btn-success btn-lg w-100">Guardar comprobante</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let canvas = document.getElementById("firma");
+
+function ajustarCanvas(){
+
+const ratio = window.devicePixelRatio || 1;
+
+canvas.width = canvas.offsetWidth * ratio;
+canvas.height = 250 * ratio;
+
+canvas.getContext("2d").scale(ratio, ratio);
+
+}
+
+ajustarCanvas();
+
+let signaturePad = new SignaturePad(canvas,{
+minWidth:1,
+maxWidth:2.5,
+penColor:"black"
+});
+
+window.addEventListener("resize",function(){
+ajustarCanvas();
+signaturePad.clear();
+});
+
+function limpiarFirma(){
+signaturePad.clear();
+}
+
+document.querySelector("form").addEventListener("submit",function(event){
+
+if(signaturePad.isEmpty()){
+alert("Debe firmar antes de guardar el comprobante");
+event.preventDefault();
+return;
+}
+
+let firmaBase64 = signaturePad.toDataURL();
+document.getElementById("firma_guardada").value = firmaBase64;
+
+});
+
+</script>
+
+</body>
+</html>
