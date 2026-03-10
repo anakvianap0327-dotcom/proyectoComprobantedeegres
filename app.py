@@ -22,8 +22,11 @@ os.makedirs(CARPETA_PDF, exist_ok=True)
 
 # Carpeta de respaldo de comprobantes
 CARPETA_BACKUP = os.path.join(BASE_DIR, "backup_comprobantes")
-if not os.path.isdir(CARPETA_BACKUP):
+
+try:
     os.makedirs(CARPETA_BACKUP)
+except FileExistsError:
+    pass
 
 # -----------------------------
 # APP FLASK
