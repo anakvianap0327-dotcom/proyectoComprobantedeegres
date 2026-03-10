@@ -2,7 +2,7 @@ import os
 import sqlite3
 #import yagmail
 import base64
-import shutil
+#import shutil
 
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from reportlab.pdfgen import canvas
@@ -12,21 +12,6 @@ from reportlab.lib.utils import ImageReader
 from PIL import Image
 from io import BytesIO
 
-# -----------------------------
-# RUTAS DEL PROYECTO
-# -----------------------------
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-CARPETA_PDF = os.path.join(BASE_DIR, "comprobantes_pdf")
-os.makedirs(CARPETA_PDF, exist_ok=True)
-
-# Carpeta de respaldo de comprobantes
-CARPETA_BACKUP = os.path.join(BASE_DIR, "backup_comprobantes")
-
-try:
-    os.makedirs(CARPETA_BACKUP)
-except FileExistsError:
-    pass
 
 # -----------------------------
 # APP FLASK
@@ -505,9 +490,6 @@ def comprobante():
     return render_template("comprobante.html", numero=numero)
 
 
-# -----------------------------
-# GUARDAR COMPROBANTE
-# -----------------------------
 @app.route("/guardar_comprobante", methods=["POST"])
 def guardar_comprobante():
 
@@ -517,9 +499,9 @@ def guardar_comprobante():
     direccion = request.form["direccion"]
     celular = request.form["celular"]
     concepto = request.form["concepto"]
-    valor = request.form["valor"]
+    valor = float(request.form.get("valor") or 0)
     fecha = request.form["fecha"]
-    firma = request.form["firma"]
+    firma = request.form.get("firma")
 
     conn = get_db()
     cursor = conn.cursor()
@@ -547,35 +529,7 @@ def guardar_comprobante():
 
     generar_pdf(numero, comprobante)
 
-    backup_seguridad(numero)
-
-    #enviar_comprobante_email(numero)
-
     return redirect(url_for("consultar_comprobantes"))
-# -----------------------------
-# BACKUP SEGURIDAD
-# -----------------------------
-def backup_seguridad(numero):
-
-    try:
-
-        # Backup base de datos
-        origen_db = os.path.join(BASE_DIR, "database.db")
-        destino_db = os.path.join(BASE_DIR, "database_backup.db")
-
-        if os.path.exists(origen_db):
-            shutil.copy(origen_db, destino_db)
-
-        # Backup PDF
-        origen_pdf = os.path.join(CARPETA_PDF, f"{numero}.pdf")
-        destino_pdf = os.path.join(CARPETA_BACKUP, f"{numero}.pdf")
-
-        if os.path.exists(origen_pdf):
-            shutil.copy(origen_pdf, destino_pdf)
-
-    except Exception as e:
-
-        print("Error en backup:", e)
 
 # -----------------------------
 # CONSULTAR COMPROBANTES
