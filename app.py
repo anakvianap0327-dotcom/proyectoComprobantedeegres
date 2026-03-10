@@ -1,6 +1,6 @@
 import os
 import sqlite3
-import yagmail
+#import yagmail
 import base64
 import shutil
 
@@ -33,9 +33,9 @@ app = Flask(__name__)
 # -----------------------------
 # CONFIGURACION CORREO
 # -----------------------------
-CORREO_REMITENTE = "anakvianap0327@gmail.com"
-PASSWORD_CORREO = "zfjc arhf knrw paks"
-CORREO_DESTINO = "erick_merc@hotmail.com"
+#CORREO_REMITENTE = "anakvianap0327@gmail.com"
+#PASSWORD_CORREO = "zfjc arhf knrw paks"
+#CORREO_DESTINO = "erick_merc@hotmail.com"
 
 
 # -----------------------------
@@ -278,39 +278,39 @@ def generar_pdf(numero, comprobante):
 # -----------------------------
 # ENVIAR COMPROBANTE POR EMAIL
 # -----------------------------
-def enviar_comprobante_email(numero):
+#def enviar_comprobante_email(numero):
 
-    try:
+    #try:
 
-        ruta_pdf = os.path.join(CARPETA_PDF, f"{numero}.pdf")
+        #ruta_pdf = os.path.join(CARPETA_PDF, f"{numero}.pdf")
 
-        if not os.path.exists(ruta_pdf):
-            print("No existe el PDF para enviar")
-            return
+        #if not os.path.exists(ruta_pdf):
+            #print("No existe el PDF para enviar")
+            #return
 
-        yag = yagmail.SMTP(CORREO_REMITENTE, PASSWORD_CORREO)
+        #yag = yagmail.SMTP(CORREO_REMITENTE, PASSWORD_CORREO)
 
-        asunto = f"Comprobante de egreso {numero}"
+        #asunto = f"Comprobante de egreso {numero}"
 
-        mensaje = f"""
-        Buen día
+        #mensaje = f"""
+        #Buen día
 
-        Se adjunta el comprobante de egreso {numero}
-        generado automáticamente por el sistema.
-        """
+        #Se adjunta el comprobante de egreso {numero}
+        #generado automáticamente por el sistema.
+        #"""
 
-        yag.send(
-            to=CORREO_DESTINO,
-            subject=asunto,
-            contents=mensaje,
-            attachments=ruta_pdf
+        #yag.send(
+            #to=CORREO_DESTINO,
+            #subject=asunto,
+            #contents=mensaje,
+            #attachments=ruta_pdf
         )
 
-        print("Correo enviado correctamente")
+        #print("Correo enviado correctamente")
 
-    except Exception as e:
+    #except Exception as e:
 
-        print("Error enviando correo:", e)
+        #print("Error enviando correo:", e)
 
 # -----------------------------
 # BUSCAR PERSONA
